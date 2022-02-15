@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.apitest.demo.dbtest.dao.TestDao">
+    <select id="getTestData" resultType="com.apitest.demo.dbtest.dto.TestDto">
+        /*TestMapper.getTestData*/
+        SELECT
+        TITLE,
+        NAME
+        FROM
+        DB_TEST
+        WHERE NAME = #{name}
+    </select>
+
+    <select id="getTestDataList" resultType="com.apitest.demo.dbtest.dto.TestDto">
+        /*TestMapper.getTestDataList*/
+        SELECT
+        TITLE,
+        NAME
+        FROM
+        DB_TEST
+    </select>
+
+</mapper>

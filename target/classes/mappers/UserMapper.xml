@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.apitest.demo.user.dao.UserDao">
+    <insert id="signup" parameterType="com.apitest.demo.user.dto.UserDto">
+        /*UserMapper.signup*/
+        INSERT INTO TB_USER
+        (EMAIL, PASSWORD, NICKNAME, USERNAME, ACTIVATED)
+        VALUES
+        (#{email}, #{password}, #{nickname}, #{username}, 'Y')
+        <selectKey keyProperty="userid" resultType="Long">
+            /*userid = key 생성된 userid가 자동적으로 userDto에 추가됨*/
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="insertUserRoles" parameterType="com.apitest.demo.user.dto.UserDto">
+        /*UserMapper.insertUserRoles*/
+        INSERT INTO TB_USER_AUTHORITY
+        (USERID, AUTHORITY_NAME)
+        VALUES
+        <foreach collection="roles" item="item" index="index" separator=",">
+            (#{userid}, '${roles[index]}')
+        </foreach>
+    </insert>
+
+    <select id="getUser" parameterType="com.apitest.demo.user.dto.UserDto" resultType="com.apitest.demo.login.dto.LoginDto">
+        /*select user info*/
+        SELECT USERID, EMAIL, PASSWORD, NICKNAME, USERNAME, ACTIVATED, REGDATE
+        FROM TB_USER
+        WHERE 1=1
+        AND EMAIL = #{email}
+        AND PASSWORD = #{password}
+    </select>
+
+    <select id="selectUserRoles" resultType="String">
+        SELECT AUTHORITY_NAME
+        FROM TB_USER_AUTHORITY
+        WHERE 1=1
+        AND USERID=#{userid}
+    </select>
+
+    <select id="getUserByUserid" resultType="com.apitest.demo.login.dto.LoginDto">
+        /*select user info*/
+        SELECT USERID, EMAIL, PASSWORD, NICKNAME, USERNAME, ACTIVATED, REGDATE
+        FROM TB_USER
+        WHERE 1=1
+        AND USERID=#{userid}
+    </select>
+
+    <select id="selectUserList" resultType="com.apitest.demo.user.dto.UserDto">
+        SELECT USERID, EMAIL, PASSWORD, NICKNAME, USERNAME, ACTIVATED, REGDATE
+        FROM TB_USER
+    </select>
+
+</mapper>
